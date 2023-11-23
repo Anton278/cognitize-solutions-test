@@ -1,7 +1,7 @@
 export interface Position {
   name: string;
   hourPrice: number;
-  tasksCount: number | string;
+  tasksCount: number;
   duties: {
     trade: {
       sellProduct: boolean;

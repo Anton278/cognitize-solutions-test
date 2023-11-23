@@ -2,19 +2,37 @@ import GripVert from "../Icons/GripVert";
 
 import s from "./Card.module.scss";
 
-function Card() {
+type CardProps = {
+  title: string;
+  tasksCount: number;
+  hourPrice: number;
+  id: number;
+  onSelect: (id: number) => void;
+  selected: boolean;
+};
+
+function Card({
+  title,
+  tasksCount,
+  hourPrice,
+  onSelect,
+  selected,
+  id,
+}: CardProps) {
   return (
-    // s.cardActive
-    <div className={[s.card].join(" ")}>
+    <div
+      className={`${s.card} ${selected ? s.cardActive : ""}`}
+      onClick={() => onSelect(id)}
+    >
       <div className={s.cardLeft}>
         <GripVert />
         <div>
-          <h5 className={s.cardTitle}>Рядовой</h5>
-          <p className={s.cardSubtitle}>15 заданий</p>
+          <h5 className={s.cardTitle}>{title}</h5>
+          <p className={s.cardSubtitle}>{tasksCount} заданий</p>
         </div>
       </div>
       <p className={s.cardPrice}>
-        <span className={s.cardPriceAccent}>$80</span> / час
+        <span className={s.cardPriceAccent}>${hourPrice}</span> / час
       </p>
     </div>
   );

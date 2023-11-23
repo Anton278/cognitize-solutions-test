@@ -38,7 +38,17 @@ function Positions() {
           ) : !positions.length ? (
             <p className={s.message}>No positions yet</p>
           ) : (
-            positions.map((position) => <Card key={position.id} />)
+            positions.map((position) => (
+              <Card
+                key={position.id}
+                title={position.name}
+                hourPrice={position.hourPrice}
+                tasksCount={position.tasksCount}
+                onSelect={(id) => setSelectedId(id)}
+                selected={selectedId === position.id}
+                id={position.id}
+              />
+            ))
           )}
         </div>
         <Button onClick={onCreateClick}>Создать новую должность</Button>
