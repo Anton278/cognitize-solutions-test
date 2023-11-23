@@ -8,9 +8,10 @@ import s from "./CreatePosition.module.scss";
 
 type CreatePositionProps = {
   id: number;
+  onSuccess: () => void;
 };
 
-function CreatePosition({ id }: CreatePositionProps) {
+function CreatePosition({ id, onSuccess }: CreatePositionProps) {
   const createPosition = usePositions((state) => state.createPosition);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
@@ -45,6 +46,7 @@ function CreatePosition({ id }: CreatePositionProps) {
         },
         id,
       });
+      onSuccess();
     } catch (err) {
       setError("Не удалось отправить данные");
     } finally {

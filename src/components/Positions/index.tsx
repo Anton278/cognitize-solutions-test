@@ -19,7 +19,7 @@ function Positions() {
     if (!positions.length) {
       return setSelectedId(1);
     }
-    id = positions[positions.length - 1].id + 1;
+    id = positions[0].id + 1;
     setSelectedId(id);
   };
 
@@ -43,7 +43,9 @@ function Positions() {
         </div>
         <Button onClick={onCreateClick}>Создать новую должность</Button>
       </div>
-      {selectedId && <CreatePosition id={selectedId} />}
+      {selectedId && (
+        <CreatePosition id={selectedId} onSuccess={() => setSelectedId(null)} />
+      )}
     </div>
   );
 }
