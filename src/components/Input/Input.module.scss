@@ -1,0 +1,41 @@
+@import "../../styles/colors";
+
+.input {
+  border-radius: 8px;
+  border: 2px solid rgba(245, 245, 245, 0.08);
+  background: $black1;
+  color: $white1;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 12px 14px;
+  outline: none;
+
+  &:hover {
+    border-color: rgba(245, 245, 245, 0.12);
+  }
+  &:focus {
+    border-color: rgba(245, 245, 245, 0.3);
+  }
+}
+
+.checkbox {
+  input {
+    display: none;
+  }
+  span {
+    display: inline-block;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 2px solid rgba(245, 245, 245, 0.08);
+  }
+  input + span:hover {
+    border-color: rgba(245, 245, 245, 0.12);
+  }
+  input:checked + span {
+    border-color: $violet;
+    background-image: url("../../../public/images/check.svg");
+  }
+}

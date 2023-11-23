@@ -1,0 +1,45 @@
+@import "../../styles/colors";
+
+.tabs {
+  display: flex;
+  position: relative;
+  width: 986px;
+
+  .tab:first-of-type {
+    left: 0;
+    z-index: 4;
+  }
+  .tab:nth-of-type(2) {
+    left: 244px;
+    z-index: 3;
+  }
+  .tab:nth-of-type(3) {
+    left: 488px;
+    z-index: 2;
+  }
+  .tab:last-of-type {
+    left: 732px;
+    z-index: 1;
+  }
+}
+
+.tab {
+  position: absolute;
+  width: 254px;
+  top: 0;
+  border-radius: 8px 8px 0px 0px;
+  border: 2px solid rgba(245, 245, 245, 0.08);
+  background: $black1;
+  height: 48px;
+  color: $gray2;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.tabActive {
+  box-shadow: 0px 4px 8px 0px rgba(103, 100, 241, 0.16) inset;
+  color: $violet;
+  z-index: 5 !important;
+}

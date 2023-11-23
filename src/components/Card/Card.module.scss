@@ -1,0 +1,59 @@
+@import "../../styles/colors";
+
+.card {
+  border-radius: 8px;
+  background: $black2;
+  display: flex;
+  padding: 22px 16px 18px;
+  justify-content: space-between;
+  cursor: pointer;
+
+  p {
+    margin: 0;
+  }
+  &:hover {
+    box-shadow: 4px 8px 40px 0px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.cardActive {
+  border: 2px solid $violet;
+}
+
+.cardLeft {
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: 16px;
+    cursor: pointer;
+  }
+}
+
+.cardTitle {
+  margin-top: 0;
+  margin-bottom: 2px;
+  color: $white1;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.cardSubtitle {
+  color: $gray1;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.cardPrice {
+  color: $gray1;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.cardPriceAccent {
+  color: $yellow;
+  font-weight: 700;
+}
