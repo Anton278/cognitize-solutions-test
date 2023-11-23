@@ -98,3 +98,11 @@
   font-weight: 500;
   line-height: 18px;
 }
+
+.errorMessage {
+  margin-bottom: 0;
+  color: $error;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}

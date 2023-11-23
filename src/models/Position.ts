@@ -1,6 +1,6 @@
 export interface Position {
   name: string;
-  hourPrice: string;
+  hourPrice: number;
   tasksCount: number | string;
   duties: {
     trade: {
@@ -21,5 +21,5 @@ export interface Position {
       kickOutFromTheGang: boolean;
     };
   };
-  id: string | number;
+  id: number;
 }

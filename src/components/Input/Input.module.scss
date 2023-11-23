@@ -10,6 +10,7 @@
   line-height: 20px;
   padding: 12px 14px;
   outline: none;
+  width: 100%;
 
   &:hover {
     border-color: rgba(245, 245, 245, 0.12);
@@ -17,6 +18,24 @@
   &:focus {
     border-color: rgba(245, 245, 245, 0.3);
   }
+}
+
+.inputError {
+  border-color: $error;
+
+  &:hover {
+    border-color: $error;
+  }
+  &:focus {
+    border-color: $error;
+  }
+}
+
+.errorMessage {
+  color: $error;
+  margin-bottom: 0;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
 .checkbox {

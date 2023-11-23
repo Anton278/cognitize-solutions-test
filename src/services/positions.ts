@@ -6,6 +6,11 @@ class PositionsService {
     const res = await api.get("/positions");
     return res.data;
   }
+
+  async create(position: Position): Promise<Position> {
+    const res = await api.post("/positions", position);
+    return res.data;
+  }
 }
 
 const positionsService = new PositionsService();

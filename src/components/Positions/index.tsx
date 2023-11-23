@@ -11,6 +11,18 @@ function Positions() {
   const { isLoading, error, getPositions, positions } = usePositions();
   const [selectedId, setSelectedId] = useState<null | number>(null);
 
+  const onCreateClick = () => {
+    if (isLoading || error) {
+      return;
+    }
+    let id: number | undefined;
+    if (!positions.length) {
+      return setSelectedId(1);
+    }
+    id = positions[positions.length - 1].id + 1;
+    setSelectedId(id);
+  };
+
   useEffect(() => {
     getPositions();
   }, []);
@@ -29,9 +41,9 @@ function Positions() {
             positions.map((position) => <Card key={position.id} />)
           )}
         </div>
-        <Button>Создать новую должность</Button>
+        <Button onClick={onCreateClick}>Создать новую должность</Button>
       </div>
-      {selectedId && <CreatePosition />}
+      {selectedId && <CreatePosition id={selectedId} />}
     </div>
   );
 }

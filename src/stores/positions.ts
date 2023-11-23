@@ -10,10 +10,11 @@ interface State {
   error: string;
 
   getPositions: () => Promise<void>;
+  createPosition: (position: Position) => Promise<void>;
 }
 
 export const usePositions = create<State>()(
-  devtools((set) => ({
+  devtools((set, get) => ({
     positions: [],
     isLoading: true,
     error: "",
@@ -21,10 +22,18 @@ export const usePositions = create<State>()(
     getPositions: async () => {
       try {
         const res = await positionsService.getAll();
+        res.reverse();
         set({ positions: res, isLoading: false });
       } catch (err) {
         set({ isLoading: false, error: "Failed to get positions" });
       }
+    },
+    createPosition: async (position: Position) => {
+      try {
+        const oldPositions = get().positions;
+        const res = await positionsService.create(position);
+        set({ positions: [res, ...oldPositions] });
+      } catch (err) {}
     },
   }))
 );
