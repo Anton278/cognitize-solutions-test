@@ -108,7 +108,7 @@
   display: flex;
   flex-direction: column;
   row-gap: 8px;
-  max-height: 400px;
+  max-height: 608px;
   overflow-y: scroll;
 }
 
@@ -171,6 +171,8 @@
 }
 
 .tabContentRight {
+  display: flex;
+  flex-direction: column;
   border-radius: 8px;
   background: $black2;
   padding: 16px;
@@ -218,6 +220,9 @@
 
 .dutiesBox {
   margin-top: 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .dutiesHead {
@@ -242,6 +247,7 @@
   padding: 12px 11px;
   display: flex;
   column-gap: 117px;
+  flex-grow: 1;
 }
 
 .dutiesCol {
