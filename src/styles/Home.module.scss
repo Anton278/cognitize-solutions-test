@@ -1,0 +1,283 @@
+@import "../styles/colors";
+
+.wrapper {
+  min-height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../../public/images/background.png");
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box {
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  background: $black1;
+  padding: 25px 25px 20px;
+}
+
+.tabs {
+  display: flex;
+  position: relative;
+  width: 986px;
+
+  .tab:first-of-type {
+    left: 0;
+    z-index: 4;
+  }
+  .tab:nth-of-type(2) {
+    left: 244px;
+    z-index: 3;
+  }
+  .tab:nth-of-type(3) {
+    left: 488px;
+    z-index: 2;
+  }
+  .tab:last-of-type {
+    left: 732px;
+    z-index: 1;
+  }
+}
+
+.tab {
+  position: absolute;
+  width: 254px;
+  top: 0;
+  border-radius: 8px 8px 0px 0px;
+  border: 2px solid rgba(245, 245, 245, 0.08);
+  background: $black1;
+  height: 48px;
+  color: $gray2;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.tabActive {
+  box-shadow: 0px 4px 8px 0px rgba(103, 100, 241, 0.16) inset;
+  color: $violet;
+  z-index: 5 !important;
+}
+
+.tabContent {
+  border-radius: 0px 0px 8px 8px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  background: $black1;
+  margin-top: 46px;
+}
+
+.contentWrapper {
+  display: flex;
+  column-gap: 16px;
+  margin: 24px 40px 40px;
+}
+
+.tabContentLeft {
+  width: 40%;
+
+  & > button {
+    margin-top: 8px;
+  }
+}
+
+.blueButton {
+  border-radius: 8px;
+  border: 2px solid rgba(245, 245, 245, 0.16);
+  background: $violet;
+  box-shadow: 0px 4px 40px 0px rgba(104, 102, 234, 0.24);
+  color: $white1;
+  text-shadow: 0px 4px 8px rgba(245, 245, 245, 0.24);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 14px;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background: lighten($color: $violet, $amount: 5%);
+  }
+  &:active {
+    background: darken($color: $violet, $amount: 5%);
+  }
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.card {
+  border-radius: 8px;
+  background: $black2;
+  display: flex;
+  padding: 22px 16px 18px;
+  justify-content: space-between;
+  cursor: pointer;
+
+  p {
+    margin: 0;
+  }
+  &:hover {
+    box-shadow: 4px 8px 40px 0px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.cardActive {
+  border: 2px solid $violet;
+}
+
+.cardLeft {
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: 16px;
+    cursor: pointer;
+  }
+}
+
+.cardTitle {
+  margin-top: 0;
+  margin-bottom: 2px;
+  color: $white1;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.cardSubtitle {
+  color: $gray1;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.cardPrice {
+  color: $gray1;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.cardPriceAccent {
+  color: $yellow;
+  font-weight: 700;
+}
+
+.tabContentRight {
+  border-radius: 8px;
+  background: $black2;
+  padding: 16px;
+  width: 60%;
+
+  & > button {
+    margin-top: 8px;
+  }
+}
+
+.nameBox {
+  border-radius: 8px;
+  padding: 16px 16px 24px;
+  background: $black1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
+
+.inpLabel {
+  color: $gray1;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.input {
+  border-radius: 8px;
+  border: 2px solid rgba(245, 245, 245, 0.08);
+  background: $black1;
+  color: $white1;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 12px 14px;
+  outline: none;
+
+  &:hover {
+    border-color: rgba(245, 245, 245, 0.12);
+  }
+  &:focus {
+    border-color: rgba(245, 245, 245, 0.3);
+  }
+}
+
+.dutiesBox {
+  margin-top: 15px;
+}
+
+.dutiesHead {
+  border-radius: 8px 8px 0px 0px;
+  background: $black1;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.24);
+  padding: 11px 16px 9px;
+}
+
+.dutiesTitle {
+  color: $gray1;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  margin: 0;
+}
+
+.dutiesBody {
+  margin-left: 5px;
+  border-radius: 0 0 8px 8px;
+  background: #292930;
+  padding: 12px 11px;
+  display: flex;
+  column-gap: 117px;
+}
+
+.dutiesCol {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+.dutyCategory {
+  color: $gray1;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
+.duitesList {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+
+  li:not(:last-of-type) {
+    margin-bottom: 8px;
+  }
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.checkboxLabel {
+  color: $white1;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+}
