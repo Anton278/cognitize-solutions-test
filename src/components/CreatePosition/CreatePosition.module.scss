@@ -1,0 +1,100 @@
+@import "../../styles/colors";
+
+.tabContentRight {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background: $black2;
+  padding: 16px;
+  width: 60%;
+
+  & > button {
+    margin-top: 8px;
+  }
+}
+
+.nameBox {
+  border-radius: 8px;
+  padding: 16px 16px 24px;
+  background: $black1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
+
+.inpLabel {
+  color: $gray1;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.dutiesBox {
+  margin-top: 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dutiesHead {
+  border-radius: 8px 8px 0px 0px;
+  background: $black1;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.24);
+  padding: 11px 16px 9px;
+}
+
+.dutiesTitle {
+  color: $gray1;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  margin: 0;
+}
+
+.dutiesBody {
+  margin-left: 5px;
+  border-radius: 0 0 8px 8px;
+  background: #292930;
+  padding: 12px 11px;
+  display: flex;
+  column-gap: 117px;
+  flex-grow: 1;
+}
+
+.dutiesCol {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+.dutyCategory {
+  color: $gray1;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
+.duitesList {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+
+  li:not(:last-of-type) {
+    margin-bottom: 8px;
+  }
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.checkboxLabel {
+  color: $white1;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+}
