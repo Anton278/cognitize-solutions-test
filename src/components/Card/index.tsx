@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import GripVert from "../Icons/GripVert";
 import { usePositions } from "@/stores/positions";
@@ -30,20 +30,23 @@ function Card({
   const changeOrder = usePositions((state) => state.changeOrder);
   const cardRef = useRef<HTMLDivElement>(null);
   const gripRef = useRef<SVGSVGElement>(null);
+  const [isGrayed, setIsGrayed] = useState(false);
 
   useEffect(() => {
     if (!gripRef.current) {
       return console.error("grip ref absent");
     }
     const onMouseDown = (e: MouseEvent) => {
+      setIsGrayed(true);
       if (!cardRef.current) {
         return;
       }
       const shiftY = e.clientY - cardRef.current.getBoundingClientRect().top;
+      const top = e.pageY - shiftY + "px";
       const cardClone = cardRef.current.cloneNode(true) as HTMLElement;
       cardClone.setAttribute(
         "style",
-        `position: absolute; width: ${cardRef.current.offsetWidth}px; pointer-events: none`
+        `position: absolute; width: ${cardRef.current.offsetWidth}px; pointer-events: none; z-index: 2; top: ${top}`
       );
       cardRef.current.insertAdjacentElement("afterend", cardClone);
 
@@ -54,7 +57,7 @@ function Card({
         const top = e.pageY - shiftY + "px";
         cardClone.setAttribute(
           "style",
-          `position: absolute; width: ${cardRef.current.offsetWidth}px; top: ${top}; pointer-events: none`
+          `position: absolute; width: ${cardRef.current.offsetWidth}px; top: ${top}; pointer-events: none; z-index: 2`
         );
       };
       document.addEventListener("mousemove", onMouseMove);
@@ -62,6 +65,7 @@ function Card({
       document.addEventListener(
         "mouseup",
         (e) => {
+          setIsGrayed(false);
           if (!cardRef.current) {
             return;
           }
@@ -136,7 +140,9 @@ function Card({
 
   return (
     <div
-      className={`${s.card} ${selected ? s.cardActive : ""}`}
+      className={`${s.card} ${selected ? s.cardActive : ""} ${
+        isGrayed ? s.cardGrayed : ""
+      }`}
       onClick={() => onSelect(id)}
       ref={cardRef}
       data-index={index}
