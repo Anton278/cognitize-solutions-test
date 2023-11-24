@@ -1,8 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+
 import GripVert from "../Icons/GripVert";
+import { usePositions } from "@/stores/positions";
+import { isPartOfCardElement } from "@/utils/isPartOfCardElement";
 
 import s from "./Card.module.scss";
-import { usePositions } from "@/stores/positions";
+import { getCardIndex } from "@/utils/getCardIndex";
 
 type CardProps = {
   title: string;
@@ -25,7 +28,6 @@ function Card({
 }: CardProps) {
   const positions = usePositions((state) => state.positions);
   const changeOrder = usePositions((state) => state.changeOrder);
-  const [styles, setStyles] = useState<React.CSSProperties>({});
   const cardRef = useRef<HTMLDivElement>(null);
   const gripRef = useRef<SVGSVGElement>(null);
 
@@ -38,11 +40,6 @@ function Card({
         return;
       }
       const shiftY = e.clientY - cardRef.current.getBoundingClientRect().top;
-
-      const cardsEl = cardRef.current.parentElement;
-      if (!cardsEl) {
-        return console.error("cards wrapper is null");
-      }
       const cardClone = cardRef.current.cloneNode(true) as HTMLElement;
       cardClone.setAttribute(
         "style",
@@ -54,42 +51,37 @@ function Card({
         if (!cardRef.current) {
           return;
         }
-        console.log("mousemove");
-
         const top = e.pageY - shiftY + "px";
         cardClone.setAttribute(
           "style",
           `position: absolute; width: ${cardRef.current.offsetWidth}px; top: ${top}; pointer-events: none`
         );
       };
-
       document.addEventListener("mousemove", onMouseMove);
+
       document.addEventListener(
         "mouseup",
         (e) => {
-          console.log("mouseup ", e);
           if (!cardRef.current) {
             return;
           }
-
           document.removeEventListener("mousemove", onMouseMove);
-
           const elemBelow = document.elementFromPoint(
             e.clientX,
             e.clientY
           ) as HTMLElement;
-          console.log(elemBelow);
-          console.log("draggable ", cardRef.current);
           if (!elemBelow) {
             // outside viewport
             cardClone.remove();
+            return;
           }
-          if (elemBelow === cardsEl) {
+          if (elemBelow === cardRef.current.parentElement) {
             // between cards
             cardClone.remove();
+            return;
           }
           if (elemBelow.dataset.isCard === "true") {
-            // below element card
+            // above card element
             const draggableIndex = cardRef.current.dataset.index;
             if (!draggableIndex) {
               return;
@@ -98,78 +90,40 @@ function Card({
             if (!droppableIndex) {
               return;
             }
-            console.log("positions ", positions);
-
             const draggable = positions[+draggableIndex];
-            console.log(draggable);
-
+            // reorder positions
             const newOrder = positions.slice();
             newOrder.splice(+draggableIndex, 1);
-            console.log("newOrder first mutation ", newOrder);
-
             newOrder.splice(+droppableIndex, 0, draggable);
-            console.log("newOrder second mutation ", newOrder);
-
             changeOrder(newOrder);
             cardClone.remove();
+            return;
           }
-          const isPartOfCardElement = (el: Element | HTMLElement): boolean => {
-            if (!el.parentElement) {
-              return false;
-            }
-            if (el.parentElement.dataset.isCard === "true") {
-              return true;
-            }
-            return isPartOfCardElement(el.parentElement);
-          };
-          console.log("isPartOfCardElement ", isPartOfCardElement(elemBelow));
-
           if (isPartOfCardElement(elemBelow)) {
+            // below element belongs to card
             const draggableIndex = cardRef.current.dataset.index;
             if (!draggableIndex) {
               return;
             }
-            const getUpperCardIndex = (el: Element | HTMLElement) => {
-              if (!el.parentElement) {
-                return;
-              }
-              if (el.parentElement.dataset.isCard === "true") {
-                return el.parentElement.dataset.index;
-              }
-              return getUpperCardIndex(el.parentElement);
-            };
-            const droppableIndex = getUpperCardIndex(elemBelow) as string;
+            const droppableIndex = getCardIndex(elemBelow);
             if (!droppableIndex) {
               return;
             }
-            console.log("positions ", positions);
-            console.log(
-              "draggableIndex ",
-              draggableIndex,
-              " droppableIndex ",
-              droppableIndex
-            );
-
             const draggable = positions[+draggableIndex];
-            console.log(draggable);
-
+            // reorder
             const newOrder = positions.slice();
             newOrder.splice(+draggableIndex, 1);
-            console.log("newOrder first mutation ", newOrder);
-
             newOrder.splice(+droppableIndex, 0, draggable);
-            console.log("newOrder second mutation ", newOrder);
-
             changeOrder(newOrder);
             cardClone.remove();
           } else {
+            // cursor somewhere else
             cardClone.remove();
           }
         },
         { once: true }
       );
     };
-
     gripRef.current.addEventListener("mousedown", onMouseDown);
 
     return () => {
@@ -182,7 +136,6 @@ function Card({
 
   return (
     <div
-      style={{ ...styles }}
       className={`${s.card} ${selected ? s.cardActive : ""}`}
       onClick={() => onSelect(id)}
       ref={cardRef}

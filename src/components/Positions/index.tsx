@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 import { usePositions } from "@/stores/positions";
 import Button from "../Button";
