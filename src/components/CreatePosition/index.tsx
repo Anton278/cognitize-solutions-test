@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Button from "../Button";
 import Input from "../Input";
 import { usePositions } from "@/stores/positions";
+import { Position } from "@/models/Position";
 
 import s from "./CreatePosition.module.scss";
 
@@ -18,50 +19,55 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
   const updatePosition = usePositions((state) => state.updatePosition);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
-  const [name, setName] = useState("");
   const [nameError, setNameError] = useState("");
-  const [sellProduct, setSellProduct] = useState(false);
-  const [setPrices, setSetPrices] = useState(false);
-  const [viewAnalytics, setViewAnalytics] = useState(false);
-  const [duel, setDuel] = useState(false);
-  const [makeClaims, setMakeClaims] = useState(false);
-  const [purchaseRawMaterials, setPurchaseRawMaterials] = useState(false);
-  const [assignWorkers, setAssignWorkers] = useState(false);
-  const [assignPositions, setAssignPositions] = useState(false);
-  const [kickOutFromTheGang, setKickOutFromTheGang] = useState(false);
 
-  const onSaveClick = async () => {
-    if (!name.trim().length) {
+  const [data, setData] = useState({
+    name: "",
+    sellProduct: false,
+    setPrices: false,
+    viewAnalytics: false,
+    duel: false,
+    makeClaims: false,
+    purchaseRawMaterials: false,
+    assignWorkers: false,
+    assignPositions: false,
+    kickOutFromTheGang: false,
+  });
+
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+
+    if (!data.name.trim().length) {
       return setNameError("Поле должно быть заполнено");
     }
     try {
       setError("");
       setIsSending(true);
+      const newPosition: Position = {
+        name: data.name,
+        tasksCount: 5,
+        hourPrice: 50,
+        duties: {
+          trade: {
+            sellProduct: data.sellProduct,
+            setPrices: data.setPrices,
+            viewAnalytics: data.viewAnalytics,
+          },
+          showdown: { duel: data.duel, makeClaims: data.makeClaims },
+          production: {
+            purchaseRawMaterials: data.purchaseRawMaterials,
+            assignWorkers: data.assignWorkers,
+          },
+          control: {
+            assignPositions: data.assignPositions,
+            kickOutFromTheGang: data.kickOutFromTheGang,
+          },
+        },
+        id,
+      };
       position
-        ? await updatePosition({
-            name,
-            tasksCount: 5,
-            hourPrice: 50,
-            duties: {
-              trade: { sellProduct, setPrices, viewAnalytics },
-              showdown: { duel, makeClaims },
-              production: { purchaseRawMaterials, assignWorkers },
-              control: { assignPositions, kickOutFromTheGang },
-            },
-            id,
-          })
-        : await createPosition({
-            name,
-            tasksCount: 5,
-            hourPrice: 50,
-            duties: {
-              trade: { sellProduct, setPrices, viewAnalytics },
-              showdown: { duel, makeClaims },
-              production: { purchaseRawMaterials, assignWorkers },
-              control: { assignPositions, kickOutFromTheGang },
-            },
-            id,
-          });
+        ? await updatePosition(newPosition)
+        : await createPosition(newPosition);
       onSuccess();
     } catch (err) {
       setError("Не удалось отправить данные");
@@ -70,49 +76,53 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
     }
   };
 
+  const onChange = (e: React.ChangeEvent<HTMLFormElement>) => {
+    if (e.target.id === "name") {
+      setNameError("");
+      setData((oldData) => ({ ...oldData, [e.target.id]: e.target.value }));
+      return;
+    }
+    setData((oldData) => ({ ...oldData, [e.target.id]: e.target.checked }));
+  };
+
   useEffect(() => {
     setNameError("");
     if (!position) {
-      setName("");
-      setSellProduct(false);
-      setSetPrices(false);
-      setViewAnalytics(false);
-      setDuel(false);
-      setMakeClaims(false);
-      setPurchaseRawMaterials(false);
-      setAssignWorkers(false);
-      setAssignPositions(false);
-      setKickOutFromTheGang(false);
+      setData({
+        name: "",
+        sellProduct: false,
+        setPrices: false,
+        viewAnalytics: false,
+        duel: false,
+        makeClaims: false,
+        purchaseRawMaterials: false,
+        assignWorkers: false,
+        assignPositions: false,
+        kickOutFromTheGang: false,
+      });
       return;
     }
-    setName(position.name);
-    setSellProduct(position.duties.trade.sellProduct);
-    setSetPrices(position.duties.trade.setPrices);
-    setViewAnalytics(position.duties.trade.viewAnalytics);
-    setDuel(position.duties.showdown.duel);
-    setMakeClaims(position.duties.showdown.makeClaims);
-    setPurchaseRawMaterials(position.duties.production.purchaseRawMaterials);
-    setAssignWorkers(position.duties.production.assignWorkers);
-    setAssignPositions(position.duties.control.assignPositions);
-    setKickOutFromTheGang(position.duties.control.kickOutFromTheGang);
+    setData({
+      name: position.name,
+      sellProduct: position.duties.trade.sellProduct,
+      setPrices: position.duties.trade.setPrices,
+      viewAnalytics: position.duties.trade.viewAnalytics,
+      duel: position.duties.showdown.duel,
+      makeClaims: position.duties.showdown.makeClaims,
+      purchaseRawMaterials: position.duties.production.purchaseRawMaterials,
+      assignWorkers: position.duties.production.assignWorkers,
+      assignPositions: position.duties.control.assignPositions,
+      kickOutFromTheGang: position.duties.control.kickOutFromTheGang,
+    });
   }, [id, position]);
 
   return (
-    <div className={s.tabContentRight}>
+    <form className={s.tabContentRight} onChange={onChange} onSubmit={onSubmit}>
       <div className={s.nameBox}>
         <label htmlFor="name" className={s.inpLabel}>
           Название
         </label>
-        <Input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-            setNameError("");
-          }}
-          error={nameError}
-        />
+        <Input type="text" id="name" value={data.name} error={nameError} />
       </div>
       <div className={s.dutiesBox}>
         <div className={s.dutiesHead}>
@@ -127,11 +137,10 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
                   <div className={s.checkboxGroup}>
                     <Input
                       type="checkbox"
-                      id="sell-product"
-                      checked={sellProduct}
-                      onChange={(e) => setSellProduct(e.target.checked)}
+                      id="sellProduct"
+                      checked={data.sellProduct}
                     />
-                    <label htmlFor="sell-product" className={s.checkboxLabel}>
+                    <label htmlFor="sellProduct" className={s.checkboxLabel}>
                       Продавать продукт
                     </label>
                   </div>
@@ -140,11 +149,10 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
                   <div className={s.checkboxGroup}>
                     <Input
                       type="checkbox"
-                      id="set-prices"
-                      checked={setPrices}
-                      onChange={(e) => setSetPrices(e.target.checked)}
+                      id="setPrices"
+                      checked={data.setPrices}
                     />
-                    <label htmlFor="set-prices" className={s.checkboxLabel}>
+                    <label htmlFor="setPrices" className={s.checkboxLabel}>
                       Выставлять цены
                     </label>
                   </div>
@@ -153,14 +161,10 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
                   <div className={s.checkboxGroup}>
                     <Input
                       type="checkbox"
-                      id="check-analytics"
-                      checked={viewAnalytics}
-                      onChange={(e) => setViewAnalytics(e.target.checked)}
+                      id="viewAnalytics"
+                      checked={data.viewAnalytics}
                     />
-                    <label
-                      htmlFor="check-analytics"
-                      className={s.checkboxLabel}
-                    >
+                    <label htmlFor="viewAnalytics" className={s.checkboxLabel}>
                       Смотреть аналитику
                     </label>
                   </div>
@@ -172,12 +176,7 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
               <ul className={s.duitesList}>
                 <li>
                   <div className={s.checkboxGroup}>
-                    <Input
-                      type="checkbox"
-                      id="duel"
-                      checked={duel}
-                      onChange={(e) => setDuel(e.target.checked)}
-                    />
+                    <Input type="checkbox" id="duel" checked={data.duel} />
                     <label htmlFor="duel" className={s.checkboxLabel}>
                       Дуель
                     </label>
@@ -187,11 +186,10 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
                   <div className={s.checkboxGroup}>
                     <Input
                       type="checkbox"
-                      id="make-claims"
-                      checked={makeClaims}
-                      onChange={(e) => setMakeClaims(e.target.checked)}
+                      id="makeClaims"
+                      checked={data.makeClaims}
                     />
-                    <label htmlFor="make-claims" className={s.checkboxLabel}>
+                    <label htmlFor="makeClaims" className={s.checkboxLabel}>
                       Выставлять претензии
                     </label>
                   </div>
@@ -207,14 +205,11 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
                   <div className={s.checkboxGroup}>
                     <Input
                       type="checkbox"
-                      id="purchase-raw-materials"
-                      checked={purchaseRawMaterials}
-                      onChange={(e) =>
-                        setPurchaseRawMaterials(e.target.checked)
-                      }
+                      id="purchaseRawMaterials"
+                      checked={data.purchaseRawMaterials}
                     />
                     <label
-                      htmlFor="purchase-raw-materials"
+                      htmlFor="purchaseRawMaterials"
                       className={s.checkboxLabel}
                     >
                       Закупать сырье
@@ -225,11 +220,10 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
                   <div className={s.checkboxGroup}>
                     <Input
                       type="checkbox"
-                      id="assign-workers"
-                      checked={assignWorkers}
-                      onChange={(e) => setAssignWorkers(e.target.checked)}
+                      id="assignWorkers"
+                      checked={data.assignWorkers}
                     />
-                    <label htmlFor="assign-workers" className={s.checkboxLabel}>
+                    <label htmlFor="assignWorkers" className={s.checkboxLabel}>
                       Назначать рабочих
                     </label>
                   </div>
@@ -243,12 +237,11 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
                   <div className={s.checkboxGroup}>
                     <Input
                       type="checkbox"
-                      id="assign-positions"
-                      checked={assignPositions}
-                      onChange={(e) => setAssignPositions(e.target.checked)}
+                      id="assignPositions"
+                      checked={data.assignPositions}
                     />
                     <label
-                      htmlFor="assign-positions"
+                      htmlFor="assignPositions"
                       className={s.checkboxLabel}
                     >
                       Назначать должности
@@ -259,11 +252,13 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
                   <div className={s.checkboxGroup}>
                     <Input
                       type="checkbox"
-                      id="kick"
-                      checked={kickOutFromTheGang}
-                      onChange={(e) => setKickOutFromTheGang(e.target.checked)}
+                      id="kickOutFromTheGang"
+                      checked={data.kickOutFromTheGang}
                     />
-                    <label htmlFor="kick" className={s.checkboxLabel}>
+                    <label
+                      htmlFor="kickOutFromTheGang"
+                      className={s.checkboxLabel}
+                    >
                       Выгонять из банды
                     </label>
                   </div>
@@ -273,11 +268,11 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
           </div>
         </div>
       </div>
-      <Button onClick={onSaveClick} disabled={isSending}>
+      <Button disabled={isSending} type="submit">
         Сохранить
       </Button>
       {error && <p className={s.errorMessage}>{error}</p>}
-    </div>
+    </form>
   );
 }
 
