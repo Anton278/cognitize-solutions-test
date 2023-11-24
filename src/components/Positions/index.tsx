@@ -27,6 +27,18 @@ function Positions() {
     getPositions();
   }, []);
 
+  useEffect(() => {
+    if (isLoading || error) {
+      return;
+    }
+    const setDefaultSelectedId = () => {
+      const firstPosition = positions[0];
+      setSelectedId(firstPosition.id);
+    };
+
+    setDefaultSelectedId();
+  }, [isLoading, error]);
+
   return (
     <div className={s.contentWrapper}>
       <div className={s.tabContentLeft}>
