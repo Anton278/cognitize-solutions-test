@@ -11,6 +11,7 @@ interface State {
 
   getPositions: () => Promise<void>;
   createPosition: (position: Position) => Promise<void>;
+  updatePosition: (position: Position) => Promise<void>;
 }
 
 export const usePositions = create<State>()(
@@ -33,6 +34,17 @@ export const usePositions = create<State>()(
         const oldPositions = get().positions;
         const res = await positionsService.create(position);
         set({ positions: [res, ...oldPositions] });
+      } catch (err) {}
+    },
+    updatePosition: async (position: Position) => {
+      try {
+        const oldPositions = get().positions;
+        const res = await positionsService.update(position);
+        set({
+          positions: oldPositions.map((oldPosition) =>
+            oldPosition.id === res.id ? res : oldPosition
+          ),
+        });
       } catch (err) {}
     },
   }))

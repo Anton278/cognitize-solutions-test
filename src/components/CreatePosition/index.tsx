@@ -13,7 +13,9 @@ type CreatePositionProps = {
 
 function CreatePosition({ id, onSuccess }: CreatePositionProps) {
   const positions = usePositions((state) => state.positions);
+  const position = positions.find((position) => position.id === id);
   const createPosition = usePositions((state) => state.createPosition);
+  const updatePosition = usePositions((state) => state.updatePosition);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
   const [name, setName] = useState("");
@@ -35,18 +37,31 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
     try {
       setError("");
       setIsSending(true);
-      await createPosition({
-        name,
-        tasksCount: 5,
-        hourPrice: 50,
-        duties: {
-          trade: { sellProduct, setPrices, viewAnalytics },
-          showdown: { duel, makeClaims },
-          production: { purchaseRawMaterials, assignWorkers },
-          control: { assignPositions, kickOutFromTheGang },
-        },
-        id,
-      });
+      position
+        ? await updatePosition({
+            name,
+            tasksCount: 5,
+            hourPrice: 50,
+            duties: {
+              trade: { sellProduct, setPrices, viewAnalytics },
+              showdown: { duel, makeClaims },
+              production: { purchaseRawMaterials, assignWorkers },
+              control: { assignPositions, kickOutFromTheGang },
+            },
+            id,
+          })
+        : await createPosition({
+            name,
+            tasksCount: 5,
+            hourPrice: 50,
+            duties: {
+              trade: { sellProduct, setPrices, viewAnalytics },
+              showdown: { duel, makeClaims },
+              production: { purchaseRawMaterials, assignWorkers },
+              control: { assignPositions, kickOutFromTheGang },
+            },
+            id,
+          });
       onSuccess();
     } catch (err) {
       setError("Не удалось отправить данные");
@@ -56,7 +71,6 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
   };
 
   useEffect(() => {
-    const position = positions.find((position) => position.id === id);
     if (!position) {
       setName("");
       setSellProduct(false);
@@ -80,7 +94,7 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
     setAssignWorkers(position.duties.production.assignWorkers);
     setAssignPositions(position.duties.control.assignPositions);
     setKickOutFromTheGang(position.duties.control.kickOutFromTheGang);
-  }, [id]);
+  }, [id, position]);
 
   return (
     <div className={s.tabContentRight}>

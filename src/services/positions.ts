@@ -11,6 +11,11 @@ class PositionsService {
     const res = await api.post("/positions", position);
     return res.data;
   }
+
+  async update(position: Position): Promise<Position> {
+    const res = await api.put(`/positions/${position.id}`, position);
+    return res.data;
+  }
 }
 
 const positionsService = new PositionsService();
