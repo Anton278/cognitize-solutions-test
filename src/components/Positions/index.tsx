@@ -30,7 +30,7 @@ function Positions() {
     if (isLoading || error) {
       return;
     }
-    const setDefaultSelectedId = () => {
+    const setFirstCardSelected = () => {
       const firstPosition = positions[0];
       if (!firstPosition) {
         return;
@@ -38,7 +38,7 @@ function Positions() {
       setSelectedId(firstPosition.id);
     };
 
-    setDefaultSelectedId();
+    setFirstCardSelected();
   }, [isLoading, error]);
 
   return (
