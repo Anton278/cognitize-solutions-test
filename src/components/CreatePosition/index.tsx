@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Button from "../Button";
 import Input from "../Input";
@@ -12,6 +12,7 @@ type CreatePositionProps = {
 };
 
 function CreatePosition({ id, onSuccess }: CreatePositionProps) {
+  const positions = usePositions((state) => state.positions);
   const createPosition = usePositions((state) => state.createPosition);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
@@ -53,6 +54,33 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
       setIsSending(false);
     }
   };
+
+  useEffect(() => {
+    const position = positions.find((position) => position.id === id);
+    if (!position) {
+      setName("");
+      setSellProduct(false);
+      setSetPrices(false);
+      setViewAnalytics(false);
+      setDuel(false);
+      setMakeClaims(false);
+      setPurchaseRawMaterials(false);
+      setAssignWorkers(false);
+      setAssignPositions(false);
+      setKickOutFromTheGang(false);
+      return;
+    }
+    setName(position.name);
+    setSellProduct(position.duties.trade.sellProduct);
+    setSetPrices(position.duties.trade.setPrices);
+    setViewAnalytics(position.duties.trade.viewAnalytics);
+    setDuel(position.duties.showdown.duel);
+    setMakeClaims(position.duties.showdown.makeClaims);
+    setPurchaseRawMaterials(position.duties.production.purchaseRawMaterials);
+    setAssignWorkers(position.duties.production.assignWorkers);
+    setAssignPositions(position.duties.control.assignPositions);
+    setKickOutFromTheGang(position.duties.control.kickOutFromTheGang);
+  }, [id]);
 
   return (
     <div className={s.tabContentRight}>
