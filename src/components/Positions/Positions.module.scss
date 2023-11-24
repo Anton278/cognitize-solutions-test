@@ -20,8 +20,11 @@
   row-gap: 8px;
   max-height: 608px;
   overflow-y: scroll;
-  margin: -40px;
-  padding: 40px;
+  // fix box-shadow cut by overflow
+  margin: -10px;
+  margin-bottom: 0;
+  padding: 10px;
+  padding-bottom: 0;
 }
 
 .message {
