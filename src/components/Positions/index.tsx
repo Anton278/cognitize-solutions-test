@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import { usePositions } from "@/stores/positions";
 import Button from "../Button";
@@ -50,7 +50,7 @@ function Positions() {
           ) : !positions.length ? (
             <p className={s.message}>No positions yet</p>
           ) : (
-            positions.map((position) => (
+            positions.map((position, i) => (
               <Card
                 key={position.id}
                 title={position.name}
@@ -59,6 +59,7 @@ function Positions() {
                 onSelect={(id) => setSelectedId(id)}
                 selected={selectedId === position.id}
                 id={position.id}
+                index={i}
               />
             ))
           )}

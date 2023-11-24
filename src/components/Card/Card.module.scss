@@ -7,6 +7,7 @@
   padding: 22px 16px 18px;
   justify-content: space-between;
   cursor: pointer;
+  user-select: none;
 
   p {
     margin: 0;
@@ -26,7 +27,8 @@
 
   svg {
     margin-right: 16px;
-    cursor: pointer;
+    cursor: move; // fallback
+    cursor: grab;
   }
 }
 

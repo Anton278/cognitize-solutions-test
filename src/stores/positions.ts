@@ -12,6 +12,7 @@ interface State {
   getPositions: () => Promise<void>;
   createPosition: (position: Position) => Promise<void>;
   updatePosition: (position: Position) => Promise<void>;
+  changeOrder: (positions: Position[]) => void;
 }
 
 export const usePositions = create<State>()(
@@ -46,6 +47,9 @@ export const usePositions = create<State>()(
           ),
         });
       } catch (err) {}
+    },
+    changeOrder: (positions) => {
+      set({ positions });
     },
   }))
 );
