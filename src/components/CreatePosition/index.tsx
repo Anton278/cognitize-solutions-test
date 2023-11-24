@@ -71,6 +71,7 @@ function CreatePosition({ id, onSuccess }: CreatePositionProps) {
   };
 
   useEffect(() => {
+    setNameError("");
     if (!position) {
       setName("");
       setSellProduct(false);

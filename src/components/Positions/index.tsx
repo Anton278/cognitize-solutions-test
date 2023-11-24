@@ -15,12 +15,11 @@ function Positions() {
     if (isLoading || error) {
       return;
     }
-    let id: number | undefined;
-    if (!positions.length) {
-      return setSelectedId(1);
-    }
-    id = positions[0].id + 1;
-    setSelectedId(id);
+    const biggestId = positions.reduce(
+      (acc, position) => (position.id > acc ? position.id : acc),
+      0
+    );
+    setSelectedId(biggestId + 1);
   };
 
   useEffect(() => {
@@ -33,6 +32,9 @@ function Positions() {
     }
     const setDefaultSelectedId = () => {
       const firstPosition = positions[0];
+      if (!firstPosition) {
+        return;
+      }
       setSelectedId(firstPosition.id);
     };
 
