@@ -8,6 +8,6 @@ In repository folder
 
     $ npm install
     $ npm run start:server
-    $ npm start
+    $ npm run dev
 
 Open [localhost:3000](http://localhost:3000/) in browser
